@@ -1,23 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+// 简单的 seeded PRNG，确保 SSR 和客户端生成一致的粒子
+function seededRandom(seed: number) {
+  return () => {
+    seed = (seed * 16807 + 0) % 2147483647;
+    return (seed - 1) / 2147483646;
+  };
+}
+
+function generateParticles() {
+  const rand = seededRandom(42);
+  return Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    left: `${rand() * 100}%`,
+    top: `${rand() * 100}%`,
+    delay: rand() * 3,
+    size: rand() * 4 + 2,
+  }));
+}
+
+const particles = generateParticles();
 
 export default function Sparkles() {
-  const [particles, setParticles] = useState<
-    { id: number; left: string; top: string; delay: number; size: number }[]
-  >([]);
-
-  useEffect(() => {
-    setParticles(
-      Array.from({ length: 30 }, (_, i) => ({
-        id: i,
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        delay: Math.random() * 3,
-        size: Math.random() * 4 + 2,
-      }))
-    );
-  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">

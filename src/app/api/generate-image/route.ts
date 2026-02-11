@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchWithRetry } from "@/lib/fetch-retry";
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
 
     const apiUrl = `${process.env.YUNWU_BASE_URL || "https://yunwu.ai"}/v1/chat/completions`;
 
-    const response = await fetch(apiUrl, {
+    const response = await fetchWithRetry(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

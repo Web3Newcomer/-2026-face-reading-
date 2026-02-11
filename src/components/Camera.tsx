@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback } from "react";
 
 interface CameraProps {
   onCapture: (imageData: string) => void;
@@ -12,27 +12,32 @@ export default function Camera({ onCapture, onClose }: CameraProps) {
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const streamRef = useRef<MediaStream | null>(null);
+
   const startCamera = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 640 } },
       });
+      streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        setStreaming(true);
       }
+      setStreaming(true);
     } catch {
       setError("无法访问摄像头，请检查权限设置");
     }
   }, []);
 
   const stopCamera = useCallback(() => {
-    if (videoRef.current?.srcObject) {
-      const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-      tracks.forEach((t) => t.stop());
-      videoRef.current.srcObject = null;
-      setStreaming(false);
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
     }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setStreaming(false);
   }, []);
 
   const capture = useCallback(() => {
@@ -53,19 +58,21 @@ export default function Camera({ onCapture, onClose }: CameraProps) {
     onCapture(data);
   }, [stopCamera, onCapture]);
 
-  // 组件加载时自动开启摄像头
-  useEffect(() => {
-    startCamera();
-    return () => {
-      stopCamera();
-    };
-  }, [startCamera, stopCamera]);
+  // 通过 ref callback 在 video 挂载时启动摄像头
+  const videoCallbackRef = useCallback(
+    (node: HTMLVideoElement | null) => {
+      videoRef.current = node;
+      if (node) startCamera();
+      else stopCamera();
+    },
+    [startCamera, stopCamera],
+  );
 
   return (
     <div className="flex flex-col items-center gap-4 w-full h-full">
       <div className="relative w-full h-full min-h-[300px] bg-black overflow-hidden flex items-center justify-center group">
         <video
-          ref={videoRef}
+          ref={videoCallbackRef}
           autoPlay
           playsInline
           muted

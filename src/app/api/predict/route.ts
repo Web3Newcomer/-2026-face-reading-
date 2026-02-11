@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildPrompt } from "@/lib/prompt";
+import { fetchWithRetry } from "@/lib/fetch-retry";
 import type { FortuneResult } from "@/lib/types";
 
 // 简单的内存 rate limiting
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
 
     console.log("Calling API:", apiUrl, "base64 length:", base64Data.length);
 
-    const response = await fetch(apiUrl, {
+    const response = await fetchWithRetry(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

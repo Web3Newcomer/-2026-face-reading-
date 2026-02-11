@@ -8,6 +8,7 @@ import PhotoUpload from "@/components/PhotoUpload";
 import LoadingAnimation from "@/components/LoadingAnimation";
 import { ZODIAC_ANIMALS } from "@/lib/types";
 import BackgroundPattern from "@/components/Pattern";
+import { addHistory, createThumbnail } from "@/lib/history";
 
 type Mode = "choose" | "camera" | "preview" | "loading";
 
@@ -66,6 +67,11 @@ export default function PredictPage() {
       sessionStorage.setItem("fortune_result", JSON.stringify(data));
       sessionStorage.setItem("fortune_image", compressed);
       sessionStorage.setItem("fortune_name", nickname);
+
+      // Save to history
+      const thumbnail = await createThumbnail(compressed);
+      addHistory({ nickname, result: data, thumbnail });
+
       router.push("/result");
     } catch {
       setError("预测失败，请稍后重试");

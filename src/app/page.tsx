@@ -103,6 +103,9 @@ export default function Home() {
       
       {/* 底部版权 */}
       <div className="absolute bottom-4 left-0 right-0 text-center z-10">
+        <a href="/history" className="inline-block text-yellow-500/40 text-xs tracking-wider mb-2 hover:text-yellow-400/60 transition-colors">
+          📜 历史记录
+        </a>
         <p className="text-red-900/30 text-[10px] tracking-wider">仅供娱乐 · AI 生成结果仅供参考</p>
       </div>
     </main>
