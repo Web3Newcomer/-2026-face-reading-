@@ -12,7 +12,6 @@ export default function ResultPage() {
   const [image, setImage] = useState<string | undefined>();
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
-  const [sharing, setSharing] = useState(false);
   const [error, setError] = useState(false);
   const [nyImage, setNyImage] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -43,38 +42,6 @@ export default function ResultPage() {
       console.error("Save failed:", err);
     } finally {
       setSaving(false);
-    }
-  }, [name]);
-
-  const handleShare = useCallback(async () => {
-    setSharing(true);
-    try {
-      const blob = await captureCard();
-      const file = new File([blob], `2026火马年运势-${name || "预测"}.png`, { type: "image/png" });
-
-      // Try Web Share API (mobile)
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], title: "2026 火马年运势" });
-        return;
-      }
-
-      // Fallback: copy image to clipboard
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({ "image/png": blob }),
-        ]);
-        alert("已复制运势卡到剪贴板，可粘贴到微信分享");
-        return;
-      } catch {
-        // clipboard also failed
-      }
-
-      // Last resort: prompt user to save manually
-      alert("请长按保存图片后分享");
-    } catch (err) {
-      console.error("Share failed:", err);
-    } finally {
-      setSharing(false);
     }
   }, [name]);
 
@@ -207,26 +174,18 @@ export default function ResultPage() {
 
         {/* 底部按钮组 */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#1a0500] to-transparent z-20 flex justify-center">
-          <div className="flex flex-row w-full max-w-xl gap-3">
+          <div className="flex flex-row w-full max-w-xl gap-4">
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex-1 btn-gold disabled:opacity-50 text-red-950 font-black px-3 py-4 rounded-full shadow-lg text-base flex items-center justify-center gap-1"
+              className="flex-1 btn-gold disabled:opacity-50 text-red-950 font-black px-4 py-4 rounded-full shadow-lg text-lg flex items-center justify-center gap-2"
             >
-              {saving ? "生成中..." : (<><span>📥</span> 保存</>)}
-            </button>
-
-            <button
-              onClick={handleShare}
-              disabled={sharing}
-              className="flex-1 btn-gold disabled:opacity-50 text-red-950 font-black px-3 py-4 rounded-full shadow-lg text-base flex items-center justify-center gap-1"
-            >
-              {sharing ? "处理中..." : (<><span>📤</span> 分享</>)}
+              {saving ? "生成中..." : (<><span>📥</span> 保存运势卡</>)}
             </button>
 
             <a
               href="/predict"
-              className="flex-none px-5 py-4 rounded-full glass-card border-gold text-yellow-200/90 font-bold hover:bg-white/10 transition-colors flex items-center justify-center"
+              className="flex-none px-6 py-4 rounded-full glass-card border-gold text-yellow-200/90 font-bold hover:bg-white/10 transition-colors flex items-center justify-center"
             >
               <span>🔄 重测</span>
             </a>
