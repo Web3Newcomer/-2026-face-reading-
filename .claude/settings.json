@@ -1,0 +1,11 @@
+{
+    "env": {
+      "ANTHROPIC_AUTH_TOKEN": "sk-ant-oat01-9xJKkhbZygo8Z7RTMsdhV8PU37-R4xgdpvaVyl8u1SmzZN2PSbxu5VjAppdXFY81WTiRz2h3rj62a6q2ZaXGBiTngFZa-AA",
+      "ANTHROPIC_BASE_URL": "https://code.newcli.com/claude/aws",
+      "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": 1
+    },
+    "permissions": {
+      "allow": [],
+      "deny": []
+    }
+  }

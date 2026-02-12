@@ -102,11 +102,25 @@ export default function Home() {
       </div>
       
       {/* 底部版权 */}
-      <div className="absolute bottom-4 left-0 right-0 text-center z-10">
-        <a href="/history" className="inline-block text-yellow-500/40 text-xs tracking-wider mb-2 hover:text-yellow-400/60 transition-colors">
+      <div className="absolute bottom-4 left-0 right-0 text-center z-10 flex flex-col items-center gap-2">
+        <a href="/history" className="inline-block text-yellow-500/40 text-xs tracking-wider hover:text-yellow-400/60 transition-colors">
           📜 历史记录
         </a>
-        <p className="text-red-900/30 text-[10px] tracking-wider">仅供娱乐 · AI 生成结果仅供参考</p>
+        <p className="text-white/40 text-[10px] tracking-wider">仅供娱乐 · AI 生成结果仅供参考</p>
+        
+        {/* Flxxx Copyright Logo */}
+        <div className="flex items-center gap-2 mt-2 opacity-90 hover:opacity-100 transition-opacity">
+          <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-white/20 shadow-lg bg-white">
+            <img 
+              src="/flxxx-logo.png" 
+              alt="Flxxx AI" 
+              className="w-full h-full object-cover object-center scale-[2.5]"
+            />
+          </div>
+          <span className="text-[10px] text-yellow-100/60 font-bold tracking-widest uppercase drop-shadow-md">
+            Powered by Flxxx AI
+          </span>
+        </div>
       </div>
     </main>
   );

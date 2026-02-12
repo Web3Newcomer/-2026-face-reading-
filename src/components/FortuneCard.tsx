@@ -169,14 +169,29 @@ export default function FortuneCard({ result, nickname, image }: FortuneCardProp
       </div>
 
       {/* 底部水印 */}
-      <div className="bg-stone-900 text-center py-3 relative overflow-hidden">
+      <div className="bg-stone-900 text-center py-4 relative overflow-hidden flex flex-col items-center justify-center gap-2">
         <div className="absolute inset-0 opacity-10" style={{
           backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)",
           backgroundSize: "10px 10px"
         }} />
+        
         <p className="text-stone-400 text-[10px] tracking-[0.2em] relative z-10 font-light">
           2026 丙午火马年 · AI 运势鉴定
         </p>
+
+        {/* Flxxx Copyright */}
+        <div className="relative z-10 flex items-center gap-2 mt-1">
+          <div className="w-5 h-5 rounded-full overflow-hidden border border-white/20 bg-white shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+             <img 
+               src="/flxxx-logo.png" 
+               alt="" 
+               className="w-full h-full object-cover object-center scale-[2.5]" 
+             />
+          </div>
+          <span className="text-[9px] text-stone-300 font-bold tracking-widest uppercase drop-shadow-sm">
+            Powered by Flxxx Crypto AI
+          </span>
+        </div>
       </div>
     </div>
   );
